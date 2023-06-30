@@ -9,14 +9,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>sharpener-web</title>
-    <script type="text/javascript" src="index.js"></script>
 </head>
 
 <body>
     <div class="container-fluid form-group bg-light">
 
-        <form class="bg-warning col-md-4 col-md-offset-4" action="#" onsubmit="UserForm(event)">
+        <form class="bg-warning col-md-4 col-md-offset-4" onsubmit="UserForm(event)">
             <h1 class="text-center text-warning">Book a call</h1>
+            <div style="display: none" class="row" id="errorMsg">
+                <p class="bg-danger col-md-4">Please fill all Inputs</p>
+            </div>
             <label>
                 Name
             </label><br />
@@ -28,13 +30,13 @@
             <label>
                 Phone
             </label><br>
-            <input type="text" placeholder="Enter Number..." id="number" class="form-control" ><br>
+            <input type="text" placeholder="Enter Number..." id="number" class="form-control"><br>
             <label>
                 Time for call
             </label><br>
             <div class="form-inline">
-                <input type="date" id="date" class="form-control" >
-                <input type="time" id="time" class="form-control" >
+                <input type="date" id="date" class="form-control">
+                <input type="time" id="time" class="form-control">
 
             </div>
 
@@ -43,7 +45,16 @@
 
 
         </form>
+       
     </div>
+    <div>
+        <h2 class="title">User Call List</h2>
+       
+        <ul class="lists">
+        </ul>
+    </div>
+    
+    <script src="index.js"></script>
 </body>
 
 </html>
