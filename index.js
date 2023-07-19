@@ -27,7 +27,7 @@ axios
         editButton.className = "btn btn-primary btn-sm float-right edit";
         editButton.appendChild(document.createTextNode("Edit"));
         button.appendChild(document.createTextNode("Remove"));
-        li.setAttribute("key", i);
+        li.setAttribute("key", res.data[i]._id);
         li.textContent = `${res.data[i].name} - ${res.data[i].email} -${res
           .data[i].number} -${res.data[i].date} -${res.data[i].time} `;
         li.appendChild(editButton);
@@ -80,8 +80,10 @@ function RemoveEditItem(e) {
     if (confirm("Are You Sure")) {
       var li = e.target.parentElement;
       var deleteKey = li.getAttribute("key");
-      console.log(deleteKey);
-      ul.removeChild(li);
+      axios.delete(`https://crudcrud.com/api/550b8d51c9eb471290dcc3d64f5f6e3b/appointmentData/${deleteKey}`).then((res)=>{
+        ul.removeChild(li);
+        console.log(res,deleteKey)
+      }).catch((err)=>console.log(err));
     }
   }
   if (e.target.classList.contains("edit")) {
