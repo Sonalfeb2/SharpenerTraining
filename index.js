@@ -12,7 +12,8 @@ var ul = document.querySelector(".lists");
 var data = JSON.parse(localStorage.getItem("lists"));
 var arrayList = [];
 
-if (data.length) {// if list stored in localstorage
+if (data.length) {
+  // if list stored in localstorage
   arrayList = data;
   for (var i = 0; i < data.length; i++) {
     var li = document.createElement("li");
@@ -47,16 +48,17 @@ function UserForm(e) {
     msg.style.display = "block";
     setTimeout(() => (msg.style.display = "none"), 3000);
   } else {
-    var getKey = submit.getAttribute("key");/// For Edit Details
+    var getKey = submit.getAttribute("key"); /// For Edit Details
     if (getKey) {
       data[getKey].name = Uname.value;
       data[getKey].email = email.value;
       data[getKey].number = number.value;
       data[getKey].date = date.value;
       data[getKey].time = time.value;
-      localStorage.setItem("lists",JSON.stringify(data));
+      localStorage.setItem("lists", JSON.stringify(data));
       window.location.reload();
-    } else { //for add new details
+    } else {
+      //for add new details
       var text = document.createTextNode(
         `${Uname.value} : ${email.value} : ${number.value} : ${date.value} : ${time.value}`
       );
@@ -81,6 +83,13 @@ function UserForm(e) {
         time: time.value
       };
       arrayList.push(obj);
+      axios
+        .post(
+          "https://crudcrud.com/api/550b8d51c9eb471290dcc3d64f5f6e3b/appointmentData",
+          obj
+        )
+        .then(res => console.log(res))
+        .catch(err=>console.log(err));
       localStorage.setItem("lists", JSON.stringify(arrayList));
     }
     Uname.value = "";
@@ -97,8 +106,8 @@ function RemoveEditItem(e) {
   if (e.target.classList.contains("delete")) {
     if (confirm("Are You Sure")) {
       var li = e.target.parentElement;
-      var deleteKey = li.getAttribute('key');
-      console.log(deleteKey)
+      var deleteKey = li.getAttribute("key");
+      console.log(deleteKey);
       ul.removeChild(li);
     }
   }
