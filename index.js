@@ -10,10 +10,15 @@ const time = document.getElementById("time");
 const submit = document.getElementById("submit");
 var ul = document.querySelector(".lists");
 var data = JSON.parse(localStorage.getItem("lists"));
+
+let url_str = window.location.href;
+
+let url = new URL(url_str);
+let search_params = url.searchParams;
 var arrayList = [];
 axios
   .get(
-    "https://crudcrud.com/api/550b8d51c9eb471290dcc3d64f5f6e3b/appointmentData"
+    "https://crudcrud.com/api/048bba71bdd84541858e89c5919a02ef/appointmentData"
   )
   .then(res => {
     if (res.data.length) {
@@ -37,6 +42,22 @@ axios
     }
   })
   .catch(err => console.log(err));
+if (search_params.get("id") !== null) {
+  axios
+    .get(
+      `https://crudcrud.com/api/048bba71bdd84541858e89c5919a02ef/appointmentData/${search_params.get(
+        "id"
+      )}`
+    )
+    .then(res => {
+      Uname.value = res.data.name;
+      email.value = res.data.email;
+      number.value = res.data.number;
+      date.value = res.data.date;
+      time.value = res.data.time;
+      submit.value = "Update a call";
+    });
+}
 function UserForm(e) {
   e.preventDefault();
   if (
@@ -57,19 +78,30 @@ function UserForm(e) {
       date: date.value,
       time: time.value
     };
-    console.log(obj);
-    arrayList.push(obj);
-    localStorage.setItem("lists", JSON.stringify(arrayList));
-    axios
-      .post(
-        "https://crudcrud.com/api/550b8d51c9eb471290dcc3d64f5f6e3b/appointmentData",
-        obj
-      )
-      .then(res => {
-        console.log(res);
-        window.location.reload();
-      })
-      .catch(err => console.log(err));
+    if (search_params.get("id")!==null) {
+      axios
+        .put(
+          `https://crudcrud.com/api/048bba71bdd84541858e89c5919a02ef/appointmentData/${search_params.get(
+            "id"
+          )}`,
+          obj
+        )
+        .then(res => {
+          alert("Update SuccessFully");
+          window.open("index.html");
+        })
+        .catch(err => console.log(err));
+    } else {
+      axios
+        .post(
+          "https://crudcrud.com/api/048bba71bdd84541858e89c5919a02ef/appointmentData",
+          obj
+        )
+        .then(res => {
+          window.location.reload();
+        })
+        .catch(err => console.log(err));
+    }
   }
 }
 
@@ -80,22 +112,20 @@ function RemoveEditItem(e) {
     if (confirm("Are You Sure")) {
       var li = e.target.parentElement;
       var deleteKey = li.getAttribute("key");
-      axios.delete(`https://crudcrud.com/api/550b8d51c9eb471290dcc3d64f5f6e3b/appointmentData/${deleteKey}`).then((res)=>{
-        ul.removeChild(li);
-        console.log(res,deleteKey)
-      }).catch((err)=>console.log(err));
+      axios
+        .delete(
+          `https://crudcrud.com/api/048bba71bdd84541858e89c5919a02ef/appointmentData/${deleteKey}`
+        )
+        .then(res => {
+          alert("Successfully deleted");
+          window.open("index.html");
+        })
+        .catch(err => console.log(err));
     }
   }
   if (e.target.classList.contains("edit")) {
     var li = e.target.parentElement;
     var index = li.getAttribute("key");
-    var fetchdetails = JSON.parse(localStorage.getItem("lists"));
-    Uname.value = fetchdetails[index].name;
-    email.value = fetchdetails[index].email;
-    number.value = fetchdetails[index].number;
-    date.value = fetchdetails[index].date;
-    time.value = fetchdetails[index].time;
-    submit.value = "Update a call";
-    submit.setAttribute("key", index);
+    window.open("index.html?id=" + index);
   }
 }
