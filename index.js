@@ -55,6 +55,7 @@ function UserForm(e) {
       data[getKey].date = date.value;
       data[getKey].time = time.value;
       localStorage.setItem("lists",JSON.stringify(data));
+      window.location.reload();
     } else { //for add new details
       var text = document.createTextNode(
         `${Uname.value} : ${email.value} : ${number.value} : ${date.value} : ${time.value}`
@@ -96,6 +97,8 @@ function RemoveEditItem(e) {
   if (e.target.classList.contains("delete")) {
     if (confirm("Are You Sure")) {
       var li = e.target.parentElement;
+      var deleteKey = li.getAttribute('key');
+      console.log(deleteKey)
       ul.removeChild(li);
     }
   }
